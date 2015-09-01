@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta name="madongdong" content="welcome page"/>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+<link href="resources/css/ext-all.css" rel="stylesheet" type="text/css"/>
+	<!-- 导入Ext JS必需的JavaScript库 -->
+	<script type="text/javascript" src="ext-all.js">
+	</script>
+	<!-- 导入Ext JS国际化所需的JavaScript库 -->
+	<script type="text/javascript" src="ext-lang-zh_CN.js">
+	</script>
+	
+	<style type="text/css">
+	#panel-1009-body
+	{
+	background-image:url(img/welcome.png);
+	}
+	#form-1010
+	{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:16px;
+	background-color:#C4C4FF;
+	border:none;
+	}
+	#form-1010-body
+	{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:16px;
+	background-color:#C4C4FF;
+	border:none;
+	}
+	#toolbar-1013
+	{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:18px;
+	background-color:#C4C4FF;
+	border:none;
+	margin:0px;
+	padding:0px 0px 0px 0px
+	}
+	#toolbar-1013-innerCt
+	{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:18px;
+	background-color:#C4C4FF;
+	}
+	
+	span
+	{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:13px;
+	font-weight:500;
+	}
+	#login
+	{
+	margin-top:30px
+	}
+	</style>
+<title>欢迎页面</title>
+</head>
+
+<body>
+	<div id="login" align="center"></div>
+	<script type="text/javascript">
+	Ext.onReady(function()
+	{
+		Ext.create('Ext.panel.Panel',
+		{
+			width: 1100, // 指定表单宽
+			height:600,
+			frame:true,
+			layout:'absolute',
+			renderTo: Ext.get('login'),
+			items:
+			[
+				
+				{
+					
+					xtype:'form',
+					frame:true,
+					height:120,
+					width:250,
+					x:600,
+					y:200,
+					// 设置该FieldSet的默认选项
+					layout: 'anchor',
+					defaults: {anchor: '95%'},
+					// 在控件集容器中定义2个单行文本框
+					items :
+					[
+						{
+							xtype:'textfield',
+							fieldLabel: "<span>用户名</span>",
+							name: 'username',
+							emptyText:'请输入您的用户名登录',
+							allowBlank:false,
+							labelAlign:'left',
+							labelWidth:50,
+							height:25,
+							margin:'5 0 10 0'
+						}, 
+						{
+							xtype:'textfield',
+							inputType:'password',
+							fieldLabel: '<span>密码</span>',
+							name: 'password',
+							emptyText:'请输入密码',
+							allowBlank:false,
+							labelAlign:'left',
+							labelWidth:50,
+							height:25,
+							margin:'0 0 0 0'
+						},
+					],
+					bbar:
+					[
+						{
+							
+							text: '<span>重设</span>',
+							handler: function() 
+							{
+								this.up('form').getForm().reset();
+							}
+						},
+						{
+							
+							text: '<span>提交</span>',
+							formBind: true, 
+							disabled: true, 
+							handler:function()
+							{
+								//获取表单，实际返回的是Ext.from.Basic对象
+								var form = this.up('form').getForm();
+								if(form.isValid())
+								{
+									form.submit
+									({
+											url:'loginadmin',
+											success:function(form,action)
+											{
+												Ext.Msg.alert('登录成功',action.result.msg);
+												window.location.href="http://localhost:8080/supermarketOnlineManager/content";
+											},
+											failure:function(form,action)
+											{
+												Ext.Msg.alert('登录失败',action.result.msg);
+											}
+									})
+								};
+							}
+						},
+						{
+							//注册按钮						
+							text:'<span>注册</span>',	
+							handler:function()
+							{
+								window.location.href="register.html" 
+							}					
+						}
+					]
+			 	}
+			]
+		})
+	});
+</script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+		"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+		"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <property name="hibernate.connection.driver_class">oracle.jdbc.driver.OracleDriver</property>
+        <property name="hibernate.connection.password">tiger</property>
+        <property name="hibernate.connection.url">jdbc:oracle:thin:@localhost:1521:orcl</property>
+        <property name="hibernate.connection.username">scott</property>
+        <property name="hibernate.default_schema">SCOTT</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.Oracle10gDialect</property>
+        <mapping class="domain.Admin"/>
+        <mapping class="domain.Commodity"/>
+		<mapping class="domain.CommodityClass"/>
+		<mapping class="domain.OrderForm"/>
+		<mapping class="domain.OrderList"/>
+		<mapping class="domain.User"/>
+      </session-factory>
+</hibernate-configuration>

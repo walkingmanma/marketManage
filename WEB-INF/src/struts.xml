@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="GBK"?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+
+    <constant name="struts.enable.DynamicMethodInvocation" value="false" />
+    <constant name="struts.devMode" value="false" />
+    <constant name="locale" value="zh_CN"/>
+	<constant name="struts.i18n.encoding" value="utf-8"/>
+	
+    <package name="default" namespace="/" extends="json-default">
+
+        <default-action-ref name="index" />
+        <global-results>
+            <result name="error">/WEB-INF/jsp/error.jsp</result>
+        </global-results>
+        <global-exception-mappings>
+            <exception-mapping exception="java.lang.Exception" result="error"/>
+        </global-exception-mappings>
+
+<!--  ==============商品种类信息管理相关的action配置====================================== -->
+        <action name="typeDeal" class="action.CommodityClassAction" method="allTypes">
+            <result type="json">
+            	<param name="contentType">text/html</param>
+            </result>
+        </action> 
+        
+        <action name="typeDealByName" class="action.CommodityClassAction" method="allTypesByName">
+            <result type="json">
+            	<param name="contentType">text/html</param>
+            </result>
+        </action> 
+          
+         <action name="update" class="action.CommodityClassAction" method="updateType">
+            <result type="json">
+            	<param name="noCache">true</param>
+            	<param name="contentType">text/html</param>
+            </result>
+        </action>
+        
+        <action name="deletetype" class="action.CommodityClassAction" method="deleteType">
+            <result type="json">
+            	<param name="noCache">true</param>
+            	<param name="contentType">text/html</param>
+            </result>
+        </action>
+        
+        <action name="addtype" class="action.CommodityClassAction" method="addType">
+            <result type="json">
+            	<param name="noCache">true</param>
+            	<param name="contentType">text/html</param>
+            </result>
+        </action>
+        
+   <!--  ====================产品操作相关action配置================================= -->
+        <action name="findcommodity" class="action.CommodityAction" method="findByNameOTypeOManu">
+            <result type="json">
+            	<param name="noCache">true</param>
+            	<param name="contentType">text/html</param>
+          	</result>
+        </action> 
+        
+        <action name="addcomm" class="action.CommodityAction" method="addCommodity">
+            <result type="json">
+            	<param name="noCache">true</param>
+            	<param name="contentType">text/html</param>
+          	</result>
+        </action> 
+        
+        <action name="editcomm" class="action.CommodityAction" method="updateCommodity">
+            <result type="json">
+            	<param name="noCache">true</param>
+            	<param name="contentType">text/html</param>
+          	</result>
+        </action> 
+   		
+   		<action name="deletecomm" class="action.CommodityAction" method="deleteCommodity">
+            <result type="json">
+            	<param name="noCache">true</param>
+            	<param name="contentType">text/html</param>
+          	</result>
+        </action> 
+        
+       <!--  =========================有关用户信息处理的action配置============================    -->
+   		<action name="finduser" class="action.UserAction" method="findUserByNameOPhone">
+            <result type="json">
+            	<param name="noCache">true</param>
+            	<param name="contentType">text/html</param>
+          	</result>
+        </action> 
+   		
+   		<action name="adduser" class="action.UserAction" method="addUser">
+            <result type="json">
+            	<param name="noCache">true</param>
+            	<param name="contentType">text/html</param>
+          	</result>
+        </action> 
+        
+        <action name="updateuser" class="action.UserAction" method="updateUser">
+            <result type="json">
+            	<param name="noCache">true</param>
+            	<param name="contentType">text/html</param>
+          	</result>
+        </action> 
+        
+        <!--  =========================有关员工信息处理的action配置============================    -->
+   		<action name="loginadmin" class="action.AdminAction" method="login">
+            <result type="json">
+            	<param name="noCache">true</param>
+            	<param name="contentType">text/html</param>
+          	</result>
+        </action>
+        
+   		<action name="findadmin" class="action.AdminAction" method="findAlladmin">
+            <result type="json">
+            	<param name="noCache">true</param>
+            	<param name="contentType">text/html</param>
+          	</result>
+        </action> 
+   		
+   		<action name="findadminByName" class="action.AdminAction" method="findadminByName">
+            <result type="json">
+            	<param name="noCache">true</param>
+            	<param name="contentType">text/html</param>
+          	</result>
+        </action> 
+   		<action name="regist" class="action.AdminAction" method="addAdmin">
+            <result type="json">
+            	<param name="noCache">true</param>
+            	<param name="contentType">text/html</param>
+          	</result>
+        </action> 
+        
+        <action name="updateadmin" class="action.AdminAction" method="updateAdmin">
+            <result type="json">
+            	<param name="noCache">true</param>
+            	<param name="contentType">text/html</param>
+          	</result>
+        </action> 
+        
+        <action name="deleteadmin" class="action.AdminAction" method="deleteAdmin">
+            <result type="json">
+            	<param name="noCache">true</param>
+            	<param name="contentType">text/html</param>
+          	</result>
+        </action> 
+        
+ <!--  =========================有关订单信息处理的action配置============================    -->
+   		
+   		<action name="addorderform" class="action.OrderFormAction" method="addOrderForm">
+            <result type="json">
+            	<param name="noCache">true</param>
+            	<param name="contentType">text/html</param>
+          	</result>
+        </action> 
+        
+      <action name="findorderform" class="action.OrderFormAction" method="findOrderForm">
+            <result type="json">
+            	<param name="noCache">true</param>
+            	<param name="contentType">text/html</param>
+          	</result>
+      </action> 
+      
+      <action name="updateorderform" class="action.OrderFormAction" method="updateOrderForm">
+            <result type="json">
+            	<param name="noCache">true</param>
+            	<param name="contentType">text/html</param>
+          	</result>
+      </action> 
+        
+    <!--  =========================有关订单详情处理的action配置============================    -->
+   		
+   		<action name="addorderlist" class="action.OrderListAction" method="addOrderList">
+            <result type="json">
+            	<param name="noCache">true</param>
+            	<param name="contentType">text/html</param>
+          	</result>
+        </action> 
+        
+	<!--  =========================有关redirection配置============================    -->
+   		
+   		<action name="content">
+            <result>/WEB-INF/jsp/content.html</result>
+       </action> 
+       
+   		<action name="*">
+			<result>/WEB-INF/jsp/{1}.jsp</result>
+		</action>
+		
+    </package>
+	
+    <!-- Add packages here -->
+
+</struts>

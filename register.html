@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta name="madongdong" content="welcome page"/>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+<link href="resources/css/ext-all.css" rel="stylesheet" type="text/css"/>
+	<!-- 导入Ext JS必需的JavaScript库 -->
+	<script type="text/javascript" src="ext-all.js">
+	</script>
+	<!-- 导入Ext JS国际化所需的JavaScript库 -->
+	<script type="text/javascript" src="ext-lang-zh_CN.js">
+	</script>
+	
+	<style type="text/css">
+	#panel-1009-body
+	{
+	background-image:url(img/welcome.png);
+	}	
+	span
+	{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:13px;
+	font-weight:500;
+	}
+	#form-1010
+	{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:16px;
+	background-color:#C4C4FF;
+	border:none;
+	}
+	#form-1010-body
+	{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:16px;
+	background-color:#C4C4FF;
+	border:none;
+	}
+	#toolbar-1017
+	{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:18px;
+	background-color:#C4C4FF;
+	border:none;
+	margin:0px;
+	padding:0px 0px 0px 0px
+	}
+	#toolbar-1017-innerCt
+	{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:18px;
+	background-color:#C4C4FF;
+	}
+	#register
+	{
+	margin-top:30px
+	}
+	</style>
+<title>注册页面</title>
+</head>
+
+<body>
+	<div id="register" align="center">
+		
+	</div>
+	<script type="text/javascript">
+	Ext.onReady(function()
+	{
+		Ext.create('Ext.panel.Panel',
+		{
+			width: 1100, // 指定表单宽
+			height:600,
+			frame:true,
+			layout:'absolute',
+			renderTo: Ext.get('register'),
+			items:
+			[
+				
+				{
+					xtype:'form',
+					frame:true,
+					height:200,
+					width:250,
+					x:600,
+					y:200,
+					// 设置该FieldSet的默认选项
+					layout: 'anchor',
+					defaults: {anchor: '95%'},
+					// 在控件集容器中定义2个单行文本框
+					items :
+					[
+						{
+							xtype:'textfield',
+							fieldLabel: "<span>用户名</span>", // 表单控件的Label
+							name: 'username', // 表单控件的名称
+							emptyText:'请输入用户名',//指定的提示信息
+							allowBlank: false, // 输入校验：不允许为空
+							minLength: 3, // 字符串最小长度
+							maxLength: 8,// 字符串最大长
+							labelAlign:'left',
+							labelWidth:50,
+							height:25,
+							margin:'5 0 10 0'
+						},
+						{
+							xtype:'textfield',
+							inputtype:'password',
+							fieldLabel: "<span>密码</span>", // 表单控件的Label
+							name: 'password', // 表单控件的名称
+							emptyText:'请输入密码',
+							allowBlank: false, // 输入校验：不允许为空
+							minLength: 4, // 字符串最小长度
+							maxLength: 8, // 字符串最大长度
+							vtype:'alphanum', //只能用数字字母和下划线组合
+							labelAlign:'left',
+							labelWidth:50,
+							height:25,
+							margin:'5 0 10 0'
+						},
+						{
+							xtype:'radiogroup',
+							fieldLabel: "<span>性别</span>", // 表单控件的Label
+							columns:2,
+							vertical:true,
+							items:
+							[
+									{boxLabel:'<span>男</spam>',name:'sex',inputValue:'男',checked:true},
+									{boxLabel:'<span>女</span>',name:'sex',inputValue:'女'}
+							],
+							labelAlign:'left',
+							labelWidth:50,
+							height:25,
+							margin:'5 0 10 0'
+							
+						},
+						{
+							xtype:'datefield',
+							fieldLabel: "<span>入职日期</span>", // 表单控件的Label
+							name: 'hireday', // 表单控件的名称
+							emptyText:'请选择入职日期',
+							allowBlank: false, // 输入校验：不允许为空
+							format:'Y-m-d',
+							labelAlign:'left',
+							labelWidth:60,
+							height:25,
+							margin:'5 0 10 0'
+							
+						},
+					],
+					bbar:
+					[
+						{
+							
+							text: '<span>重设</span>',
+							handler: function() 
+							{
+								this.up('form').getForm().reset();
+							}
+						},
+						{
+							
+							text: '<span>提交</span>',
+							formBind: true, 
+							disabled: true, 
+							handler:function()
+							{
+								//获取表单，实际返回的是Ext.from.Basic对象
+								var form = this.up('form').getForm();
+								if(form.isValid())
+								{
+									form.submit
+									({
+											url:'regist',
+											success:function(form,action)
+											{
+												Ext.Msg.alert('注册成功',action.result.msg);
+												window.location.href="http://localhost:8080/supermarketOnlineManager/welcome.html";
+											},
+											failure:function(form,action)
+											{
+												Ext.Msg.alert('注册失败',action.result.msg);
+											}
+									})
+								};
+							}
+						},
+					]
+			 	}
+			]
+		})
+	});
+</script>
+</body>
+</html>

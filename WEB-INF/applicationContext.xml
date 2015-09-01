@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="GBK"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+	
+	<!-- 定义数据源bean，采用c3p0数据源 -->
+	<!-- 设置连接数据库的驱动，url，用户名，密码，连接池的最大连接数，最小连接数，初始连接数等 -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close"
+		p:driverClass="oracle.jdbc.driver.OracleDriver"
+		p:jdbcUrl="jdbc:oracle:thin:@localhost:1521:orcl"
+		p:user="scott"
+		p:password="tiger"
+		p:minPoolSize="2"
+		p:maxPoolSize="200"
+		p:initialPoolSize="2"
+		p:maxIdleTime="20"/>
+		
+	<!-- 配置hibernate的sessionFactory，并注入依赖数据源 -->
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean"
+		p:dataSource-ref="dataSource">
+		<!-- annotatedClass用于配置所有的持久化类 -->
+		<property name="annotatedClasses">
+			<list>
+				<value>domain.Admin</value>
+				<value>domain.Commodity</value>
+				<value>domain.CommodityClass</value>
+				<value>domain.OrderForm</value>
+				<value>domain.OrderList</value>
+				<value>domain.User</value>
+			</list>
+		</property>		
+		<property name="hibernateProperties">
+			<value>
+				hibernate.dialect=org.hibernate.dialect.Oracle10gDialect
+				hibernate.show_sql=true
+				hibernate.default_schema=SCOTT
+				hibernate.format_sql=true
+				hibernate.cache.use_second_level_cache=true
+				hibernate.temp.use_jdbc_metadata_defaults=false 	
+				hibernate.cache.region.factory_class=org.hibernate.cache.ehcache.EhCacheRegionFactory
+			</value>
+		</property>
+	</bean>
+	
+	<!-- ==================配置hibernate的局部事务管理器，使用hibernateTransactionManager类================ -->
+	<!-- ==================配置 hibernateTransactionManager时需要注入sessionFactory=======================-->
+	<bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager"
+	p:sessionFactory-ref="sessionFactory"/>
+	
+	<!-- ============================DAO(数据访问对象)的配置============================================== -->
+	<bean id="daoTemplate" abstract="true" lazy-init="true"
+	p:sessionFactory-ref="sessionFactory"/>
+	<bean id="commodityClassDaoImp" class="dao.Imp.CommodityClassDaoImp" 
+	parent="daoTemplate"/>
+	<bean id="commodityDaoImp" class="dao.Imp.CommodityDaoImp"
+	parent="daoTemplate"/>
+	<bean id="adminDaoImp" class="dao.Imp.AdminDaoImp"
+	parent="daoTemplate"/>
+	<bean id="userDaoImp" class="dao.Imp.UserDaoImp"
+	parent="daoTemplate"/>
+	<bean id="orderFormDaoImp" class="dao.Imp.OrderFormDaoImp"
+	parent="daoTemplate"/>
+	<bean id="orderlistDaoImp" class="dao.Imp.OrderListDaoImp"
+	parent="daoTemplate"/>
+	
+	<!-- =============================业务网逻辑组件的配置================================================ -->
+	<bean id="commodityClassService" class="service.Imp.CommodityClassServiceImp"
+			p:typeDaoImp-ref="commodityClassDaoImp"
+			scope="prototype"/>
+	<bean id="commodityService" class="service.Imp.CommodityServiceImp"
+			p:commodityDaoImp-ref="commodityDaoImp"
+			p:commodityclassDaoimp-ref="commodityClassDaoImp"
+			scope="prototype"/>
+	<bean id="userService" class="service.Imp.UserServiceImp"
+			p:userdaoimp-ref="userDaoImp"
+			scope="prototype"/>
+	<bean id="adminService" class="service.Imp.AdminServiceImp"
+			p:adminDaoImp-ref="adminDaoImp"
+			scope="prototype"/>	
+	<bean id="orderformservice" class="service.Imp.OrderFormServiceImp"
+			p:userdaoimp-ref="userDaoImp"
+			p:orderformdaoimp-ref="orderFormDaoImp"
+			scope="prototype"/>		
+	<bean id="orderlistservice" class="service.Imp.OrderListServiceImp"
+			p:commoditydaoimp-ref="commodityDaoImp"
+			p:orderformdapimp-ref="orderFormDaoImp"
+			p:orderlistdaoimp-ref="orderlistDaoImp"
+			scope="prototype"/>		
+						
+	<!-- 配置事务增强处理bean，指定事务处理器 -->
+	<!-- 配置@Aspectj的支持 -->
+	<aop:aspectj-autoproxy />
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="find*" read-only="true"/>
+			<tx:method name="is*" read-only="true"/>
+			<tx:method name="add*" isolation="READ_COMMITTED" propagation="REQUIRED" timeout="5"/>
+			<tx:method name="delete*" isolation="READ_COMMITTED" propagation="REQUIRED" timeout="5"/>
+			<tx:method name="update*" isolation="READ_COMMITTED" propagation="REQUIRED" timeout="5"/>
+		</tx:attributes>
+	</tx:advice>
+	<!-- AOP元素的配置 -->
+	<aop:config>
+		<aop:pointcut expression="execution(* service.Imp.*Imp.*(..))" id="pointcut"/>
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="pointcut"/>
+	</aop:config>
+</beans>
